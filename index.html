@@ -1,0 +1,1960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OJT Blog - DepEd Sorsogon City</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .week-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+
+        }
+        .week-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .active-week {
+            border-left: 4px solid #2563eb;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 0;
+            width: 95%; /* Increased from 90% */
+    max-width: 1400px; /* Even wider */
+    margin: 1% auto; /* Reduced top margin */
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 35px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.gallery-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    /* Container will adjust based on content */
+    min-height: 150px;
+    max-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa; /* Background for spacing */
+}
+
+.gallery-item img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Shows full image without cropping */
+    width: auto; /* Maintain original width */
+    height: auto; /* Maintain original height */
+    transition: transform 0.3s ease;
+}
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+        .delete-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .gallery-item:hover .delete-btn {
+            opacity: 1;
+        }
+        .department-hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6));
+            background-size: cover;
+            background-position: center;
+        }
+        .showcase-card {
+            transition: all 0.3s ease;
+        }
+        .showcase-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        /* NXT Gallery Styles */
+        .nxt-gallery {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .nxt-gallery-header {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+        }
+        .nxt-gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 2rem;
+        }
+        .nxt-item {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .nxt-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        .nxt-item-img {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+        }
+        .nxt-item-content {
+            padding: 1.5rem;
+        }
+        .nxt-item-title {
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: #2d3748;
+        }
+        .nxt-item-desc {
+            color: #718096;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        .portrait-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.portrait-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    width: 100%;
+    aspect-ratio: 3/4; /* Default to portrait-ish ratio */
+    /* OR use a square for flexibility: aspect-ratio: 1/1; */
+}
+
+.portrait-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This will crop both portrait and landscape to fit */
+    transition: transform 0.3s ease;
+}
+        .portrait-item:hover img {
+            transform: scale(1.1);
+        }
+        .portrait-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 8px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+.bg-slider {
+    width: 100%;
+    height: 100%;
+    background-size: cover;              /* This will fill the space but may crop */
+    background-position: center center;  /* Centers the image */
+    background-repeat: no-repeat;
+}
+
+/* For NO CROPPING - use contain instead */
+.bg-slider-no-crop {
+    background-size: contain !important; /* Shows full image with black bars */
+    background-color: #000;              /* Black background for bars */
+}
+
+
+@keyframes slideShowInstant {
+    0%, 8.32%    { background-image: url('assets/img/ojtpics/slide/1 (1).jpeg'); }
+    8.33%, 16.65%  { background-image: url('assets/img/ojtpics/slide/1 (2).jpeg'); }
+    16.66%, 24.98% { background-image: url('assets/img/ojtpics/slide/1 (3).jpeg'); }
+    24.99%, 33.31% { background-image: url('assets/img/ojtpics/slide/1 (4).jpeg'); }
+    33.32%, 41.64% { background-image: url('assets/img/ojtpics/slide/1 (5).jpg'); }
+    41.65%, 49.97% { background-image: url('assets/img/ojtpics/slide/1 (6).jpg'); }
+    49.98%, 58.30% { background-image: url('assets/img/ojtpics/slide/1 (7).jpg'); }
+    58.31%, 66.63% { background-image: url('assets/img/ojtpics/slide/1 (8).jpg'); }
+    66.64%, 74.96% { background-image: url('assets/img/ojtpics/slide/1 (9).jpg'); }
+    74.97%, 83.29% { background-image: url('assets/img/ojtpics/slide/1 (10).jpg'); }
+    83.30%, 91.62% { background-image: url('assets/img/ojtpics/slide/1 (11).jpg'); }
+    91.63%, 99.99% { background-image: url('assets/img/ojtpics/slide/1 (12).jpg'); }
+    100% { background-image: url('assets/img/ojtpics/slide/1 (1).jpeg'); }
+}
+
+/* Apply the instant change animation */
+.bg-slider {
+    animation: slideShowInstant 40s infinite;
+}
+
+/* Optional: Add a container for the slider with controlled aspect ratio */
+.slider-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* If you want to manually control transitions */
+.bg-slider-manual {
+    background-size: cover;
+    background-position: center;
+}
+
+/* Height adjustments for responsiveness */
+@media (max-width: 768px) {
+    .department-hero {
+        height: 50vh !important;
+        min-height: 400px !important;
+        max-height: 500px !important;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .department-hero {
+        height: 55vh !important;
+        min-height: 450px !important;
+        max-height: 600px !important;
+    }
+}
+
+/* If you want to see the full images without cropping */
+.bg-slider-full {
+    background-size: contain !important;
+    background-color: #000 !important;
+    background-position: center center !important;
+}
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center">
+                  
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#department" class="text-gray-600 hover:text-blue-600 font-medium">Department</a>
+                    <a href="#weeks" class="text-gray-600 hover:text-blue-600 font-medium">Weekly Blog</a>
+                    <a href="#showcase" class="text-gray-600 hover:text-blue-600 font-medium">APP</a>
+                    <a href="#gallery" class="text-gray-600 hover:text-blue-600 font-medium">Gallery</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="menu-toggle" class="text-gray-600 hover:text-blue-600">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-white py-2 px-4 shadow-lg">
+            <a href="#department" class="block py-2 text-gray-600 hover:text-blue-600">Department</a>
+            <a href="#weeks" class="block py-2 text-gray-600 hover:text-blue-600">Weekly Blog</a>
+            <a href="#showcase" class="block py-2 text-gray-600 hover:text-blue-600">APP</a>
+            <a href="#gallery" class="block py-2 text-gray-600 hover:text-blue-600">Gallery</a>
+        </div>
+    </nav>
+
+
+    <!-- Department Information Section -->
+    <section class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <div class="rounded-xl overflow-hidden shadow-lg">
+                        <div class="h-80 bg-cover bg-center" style="background-image: url('assets/img/ojtpics/main/me.jpg');"></div>
+                    </div>
+                </div>
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-serif font-bold text-gray-800 mb-6">OJT BLOG</h2>
+                    <p class="text-gray-600 mb-4 text-lg">
+                        Welcome to my weekly blog! I’m Kerbi Eugerio, and I’m excited to share my experiences as an intern at the Department of Education, School Division Office of Sorsogon.
+                    </p>
+                    <p class="text-gray-600 mb-6 text-lg">
+                        Each week, I will be sharing my personal experiences, the challenges I face, and the lessons I learn along the way. This journey is not only about completing tasks but also about personal growth, learning from mistakes, and understanding the process. Join me as I reflect on how this internship is helping shape my skills, mindset, and future goals.
+                    </p>
+                    <div class="flex items-center mt-8">
+                        <div class="h-12 w-12 rounded-full overflow-hidden flex items-center justify-center">
+                            <img src="assets/img/ojtpics/main/mepc.jpg" 
+                                 alt="Kerbi Vincent D. Eugerio"
+                                 class="h-full w-full object-cover">
+                        </div>
+                        <div class="ml-4">
+                            <p class="font-semibold text-gray-800">Kerbi Vincent D. Eugerio</p>
+                            <p class="text-gray-600">BSIT-4</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+          <!-- Logos - Centered and Properly Spaced -->
+          <div class="flex justify-center items-center gap-8 md:gap-20 flex-wrap">
+            <div class="flex flex-col items-center">
+                <img src="https://depedsorsogon.com.ph/images/logo.png"
+                     alt="DepEd Sorsogon Logo"
+                     class="h-20 md:h-24 object-contain mb-2">
+                <p class="text-sm text-black">DepEd Sorsogon</p>
+            </div>
+            
+            <div class="flex flex-col items-center">
+                <img src="https://srv1.thelewiscollege.edu.ph/mytlc/assets/images/ccs_logo.png"
+                     alt="The Lewis College CCS Logo"
+                     class="h-20 md:h-24 object-contain mb-2">
+                <p class="text-sm text-black">College of Computer Studies</p>
+            </div>
+            
+            <div class="flex flex-col items-center">
+                <img src="https://srv1.thelewiscollege.edu.ph/mytlc/assets/images/tlc_logo.png"
+                     alt="The Lewis College Logo"
+                     class="h-20 md:h-24 object-contain mb-2">
+                <p class="text-sm text-black">The Lewis College</p>
+            </div>
+        </div>
+    </section>
+
+<!-- Department Hero Section -->
+<section id="department" class="department-hero relative text-white overflow-hidden">
+    <!-- Background Slider - Adjusted Height -->
+    <div class="absolute inset-0 z-0 h-[80vh] min-h-[600px] max-h-[800px]">
+        <div class="bg-slider h-full"></div>
+        <div class="absolute inset-0 bg-black/50"></div>
+    </div>
+
+    <!-- Content Container - Centered then pushed down MORE -->
+    <div class="relative z-10 h-[80vh] min-h-[600px] max-h-[800px] flex flex-col justify-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 transform translate-y-32 md:translate-y-59"> <!-- Increased from 20/50 to 32/64 -->
+          
+        </div>
+    </div>
+</section>
+    <!-- Weekly Blog Section -->
+    <section id="weeks" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-serif font-bold text-gray-800 mb-4">OJT Weekly Blog</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Week 1 Card -->
+                <div class="week-card bg-white rounded-xl shadow-md overflow-hidden active-week" onclick="openModal('week1')">
+                    <div class="h-48 bg-cover bg-center"style="background-image: url('assets/img/ojtpics/Week 1/1 (1).jpg'); background-color: #f5f5f5;"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Week 1</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Orientation & Department Assignment</h3>
+                        <p class="text-gray-600 mb-4">
+                          An overview of DepEd operations, department roles, and the initial assignment process during my first day of OJT.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Week 2 Card -->
+                <div class="week-card bg-white rounded-xl shadow-md overflow-hidden" onclick="openModal('week2')">
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('assets/img/ojtpics/Week 2/2 (1).jpg');"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Week 2</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Document Processing & Tracking</h3>
+                        <p class="text-gray-600 mb-4">
+                          Handling priority documents, preparing files for signature, and learning the document tracking workflow.
+                        </p>
+                        
+                       
+                    </div>
+                </div>
+
+                <!-- Week 3 Card -->
+                <div class="week-card bg-white rounded-xl shadow-md overflow-hidden" onclick="openModal('week3')">
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('assets/img/ojtpics/Week 3/3 (1).jpg');"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Week 3</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Live Streaming Support & DTS Workflow</h3>
+                        <p class="text-gray-600 mb-4">
+                          Operating OBS for live programs while processing and tracking signed documents.
+                        </p>
+                        
+                     
+                    </div>
+                </div>
+
+                <!-- Week 4 Card -->
+                <div class="week-card bg-white rounded-xl shadow-md overflow-hidden" onclick="openModal('week4')">
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('assets/img/ojtpics/Week 4/4 (1).jpg');"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Week 4</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Hardware Troubleshooting & System Setup</h3>
+                        <p class="text-gray-600 mb-4">
+                          Diagnosing system issues, assembling computer units, and installing operating systems for school use.
+                        </p>
+                      
+                    </div>
+                </div>
+
+                <!-- Week 5 Card -->
+                <div class="week-card bg-white rounded-xl shadow-md overflow-hidden" onclick="openModal('week5')">
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('assets/img/ojtpics/Week 5/5 (1).jpg');"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Week 5</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Data Encoding & Document Verification</h3>
+                        <p class="text-gray-600 mb-4">
+                          Encoding assessment results, verifying records, and resolving document tracking issues.
+                        </p>
+                        
+                      
+                    </div>
+                </div>
+
+                <!-- Week 6 Card -->
+                <div class="week-card bg-white rounded-xl shadow-md overflow-hidden" onclick="openModal('week6')">
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('assets/img/ojtpics/Week 6/6 (1).jpg');"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Week 6</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">System Upgrading & Office Support Tasks</h3>
+                        <p class="text-gray-600 mb-4">
+                          Reusing hardware components, upgrading system units, supporting office aesthetics, and verifying encoded records.
+                        </p>
+                        
+                     
+                    </div>
+                </div>
+
+                <!-- Week 7 Card -->
+                <div class="week-card bg-white rounded-xl shadow-md overflow-hidden" onclick="openModal('week7')">
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('assets/img/ojtpics/Week 7/7 (1).jpg');"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Week 7</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Document Prioritization & Field Assistance</h3>
+                        <p class="text-gray-600 mb-4">
+                          Managing priority documents and assisting in off-site evaluation activities for school events.
+                        </p>
+                        
+                      
+                    </div>
+                </div>
+
+                <!-- Week 8 Card -->
+                <div class="week-card bg-white rounded-xl shadow-md overflow-hidden" onclick="openModal('week8')">
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('assets/img/ojtpics/Week 8/8 (1).jpg');"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Week 8</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">
+                            National Teachers’ Month Culminating Activities & Office Support
+                          </h3>
+                          <p class="text-gray-600 mb-4">
+                            Managing high-volume document requests, client inquiries, and preparation of certificates during major institutional events.
+                          </p>
+                    </div>
+                </div>
+
+                <!-- Week 9 Card -->
+                <div class="week-card bg-white rounded-xl shadow-md overflow-hidden" onclick="openModal('week9')">
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('assets/img/ojtpics/Week 9/9 (1).jpg');"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Week 9</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Application Deployment & Workflow Improvement</h3>
+                        <p class="text-gray-600 mb-4">
+                          Developing and deploying tools to streamline document tracking and supporting office data management tasks.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Week 10 Card -->
+                <div class="week-card bg-white rounded-xl shadow-md overflow-hidden" onclick="openModal('week10')">
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('assets/img/ojtpics/Week 10/10 (1).jpeg');"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Week 10</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">
+                            Kasanggayahan Parade Participation & Advanced Document Handling
+                          </h3>
+                          <p class="text-gray-600 mb-4">
+                            Supporting division-wide activities, urgent document processing, and workflow improvement initiatives.
+                          </p>
+                     
+                    </div>
+                </div>
+
+                <!-- Week 11 Card -->
+                <div class="week-card bg-white rounded-xl shadow-md overflow-hidden" onclick="openModal('week11')">
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('assets/img/ojtpics/Week 11/11 (1).jpg');"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Week 11</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">
+                            Routine Document Processing & DTS Coordination
+                          </h3>
+                          <p class="text-gray-600 mb-4">
+                            Handling daily document intake, scanning, and inter-office routing through the Document Tracking System.
+                          </p>
+                    </div>
+                </div>
+
+                <!-- Week 12 Card -->
+                <div class="week-card bg-white rounded-xl shadow-md overflow-hidden" onclick="openModal('week12')">
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('assets/img/ojtpics/Week 12/12 (1).jpg');"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Week 12</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">
+                            Office Maintenance & Document Management
+                          </h3>
+                          <p class="text-gray-600 mb-4">
+                            Supporting daily office operations through printer maintenance, inventory restocking, and routine document processing.
+                          </p>
+                    </div>
+                </div>
+
+                <!-- Week 13 Card -->
+                <div class="week-card bg-white rounded-xl shadow-md overflow-hidden" onclick="openModal('week13')">
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('assets/img/ojtpics/Week 13/13 (6).jpg');"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Week 13</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">
+                            Document Workflow Optimization & Application Feedback Coordination
+                          </h3>
+                          <p class="text-gray-600 mb-4">
+                            Improving document flow for executive signing and refining system requirements through testing and feedback.
+                          </p>
+                    </div>
+                </div>
+
+                <!-- Week 14 Card -->
+                <div class="week-card bg-white rounded-xl shadow-md overflow-hidden" onclick="openModal('week14')">
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('assets/img/ojtpics/Week 14/14 (1).jpg');"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Week 14</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">
+                            ManCom & Christmas Celebration Support
+                          </h3>
+                          <p class="text-gray-600 mb-4">
+                            Assisting in event preparations, gift distribution, and attendance coordination during official office celebrations.
+                          </p>
+                     
+                    </div>
+                </div>
+
+                <!-- Week 15 Card -->
+                <div class="week-card bg-white rounded-xl shadow-md overflow-hidden" onclick="openModal('week15')">
+                    <div class="h-48 bg-cover bg-center" style="background-image: url('assets/img/ojtpics/Week 15/15 (1).jpg');"></div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">Week 15</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">
+                            Office Hardware Setup & System Prototype Testing
+                          </h3>
+                          <p class="text-gray-600 mb-4">
+                            Improving office efficiency through hardware installation and initial system testing in a live office environment.
+                          </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+<!-- Week 1 Modal -->
+<div id="week1-modal" class="modal">
+    <span class="close-modal" onclick="closeModal('week1')">&times;</span>
+    <div class="modal-content" style="max-width: 1200px;">
+        <div class="bg-blue-600 text-white p-6">
+            <h2 class="text-3xl font-bold">Week 1</h2>
+        </div>
+        <div class="p-8">
+            <div class="mb-8">
+                <div class="bg-gray-50 p-6 rounded-lg">
+
+                    <p class="text-gray-700 mb-4">
+                        During the first week of my On-the-Job Training (OJT), we attended an orientation led by Ma’am Laarni. She explained the rules, expectations, and workflow of the office, which helped us understand how the organization operates. After the orientation, we were given a tour of the different departments in the DepEd office. Once the tour was finished, each intern was assigned to a department based on operational needs.
+                      </p>
+                      
+                      <p class="text-gray-700 mb-4">
+                        Initially, my fellow interns Trexxie, Kathleen, and I were assigned to the ICT Office. However, in the afternoon, I was reassigned to the ASDS Office by Ma’am Cheryll Bermudo, the Assistant Schools Division Superintendent (ASDS). My first day in the ASDS Office was very hectic, as I was immediately introduced to Sir Fire, Ma’am Alyssa, and Ma’am Cheryll Bermudo.
+                      </p>
+                      
+                      <p class="text-gray-700 mb-4">
+                        The workflow in the ASDS Office is organized around weekly team goals. For that particular week, our main task was to sort and review official documents. This included checking files for incorrect spelling of signatories’ names. If any errors were found, the documents were returned to the Records Section to be sent back to the client or forwarded to the Accounting Office for proper signing. We also organized files by month, specifically for OPCRF and IPCRF documentation.
+                      </p>
+                      
+                      <p class="text-gray-700">
+                        Although the tasks were demanding, the experience gave me an early understanding of how teamwork, attention to detail, and proper document management are essential in a professional office setting. It was a challenging but valuable start to my OJT experience.
+                      </p>
+                      
+                   
+                </div>
+                <div class="portrait-gallery" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 1/1 (1).jpg" alt="Office Tour">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 1/1 (2).jpg" alt="Team Meeting">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 1/1 (3).jpg" alt="Orientation">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 1/1 (4).gif" >
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 1/1 (5).jpg" alt="Workspace">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 1/1 (6).jpg" alt="First Day">
+                    </div>
+                </div>
+            </div>
+          
+        </div>
+    </div>
+</div>
+
+<!-- Week 2 Modal -->
+<div id="week2-modal" class="modal">
+    <span class="close-modal" onclick="closeModal('week2')">&times;</span>
+    <div class="modal-content" style="max-width: 1200px;">
+        <div class="bg-blue-600 text-white p-6">
+            <h2 class="text-3xl font-bold">Week 2</h2>
+        </div>
+        <div class="p-8">
+            <div class="mb-8">
+                <div class="bg-gray-50 p-6 rounded-lg">
+
+                    <p class="text-gray-700 mb-4">
+                        During the second week of my OJT, my tasks became more focused on document processing and office workflow. On Monday, Sir Welfire and I prepared several sets of documents placed in megaboxes for Ma’am Cheryll Bermudo to review and sign. These documents included travel authorities and other priority files that required her signature, as she was scheduled to attend an official event in Masbate.
+                      </p>
+                      
+                      <p class="text-gray-700 mb-4">
+                        The documents placed in the megaboxes were organized based on urgency, while the remaining files were sorted by date. These included OPCRF and IPCRF documents, which were carefully checked for the correct spelling of Ma’am Cheryll’s name in the signatories section. After the documents were signed, they were forwarded to the appropriate offices, such as the Records Section, SDS Office, or CID Office.
+                      </p>
+                      
+                      <p class="text-gray-700">
+                        Throughout the week, Sir Welfire also taught me how to use the Document Tracking System (DTS). I learned how to identify where a document is routed after being signed and how it moves through different departments. This experience helped me understand the importance of proper document handling, accuracy, and coordination within the office.
+                      </p>
+                      
+                </div>
+                <div class="portrait-gallery" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 2/2 (1).jpg" alt="Document Scanning">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 2/2 (2).jpg" alt="Filing System">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 2/2 (3).jpg" alt="Records Room">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 2/2 (4).jpg" alt="Digital Archive">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 2/2 (5).gif" alt="Training Session">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 2/2 (6).jpg" alt="Document Review">
+                    </div>
+                </div>
+            </div>
+          
+        </div>
+    </div>
+</div>
+
+<!-- Week 3 Modal -->
+<div id="week3-modal" class="modal">
+    <span class="close-modal" onclick="closeModal('week3')">&times;</span>
+    <div class="modal-content" style="max-width: 1200px;">
+        <div class="bg-blue-600 text-white p-6">
+            <h2 class="text-3xl font-bold">Week 3</h2>
+        </div>
+        <div class="p-8">
+             <div class="mb-8">
+                <div class="bg-gray-50 p-6 rounded-lg">
+
+                    <p class="text-gray-700 mb-4">
+                        During the third week of my OJT, I was involved in both technical support and document processing tasks. One of the key events of the week was assisting in the operation of OBS (Open Broadcaster Software) for the live streaming of an official program. This provided me with hands-on experience in managing live broadcasts and understanding the technical setup required.
+                      </p>
+                      
+                      <p class="text-gray-700 mb-4">
+                        Alongside the live streaming activities, I processed documents that were returned from Masbate and had already been signed by Ma’am Cheryll Bermudo. These documents were sorted, reviewed, and prepared for distribution to the appropriate offices after verification.
+                      </p>
+                      
+                      <p class="text-gray-700 mb-4">
+                        Some documents returned from Masbate were no longer attached to their original folders or envelopes that contained the tracking slip. These papers were likely separated during transport or the signing process. To ensure proper tracking, the documents were re-encoded and reattached a new tracking slip, allowing clients and offices to continue monitoring their status even if the documents were separated from the original batch or attachment.
+                      </p>
+                      
+                      <p class="text-gray-700">
+                        During the week, Sir Welfire and Ma’am Alyssa asked if I could create an overlay application to help streamline the DTS process. The idea was to make adding remarks quicker when scanning each document’s tracking slip. I explained that I would try to develop it, but it would be a learning curve for me since it was my first time creating a web store extension. This task allowed me to contribute to improving workflow efficiency while gaining hands-on experience with application development.
+                      </p>
+                      
+                </div>
+                <div class="portrait-gallery" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 3/3 (1).jpg" alt="HR Database">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 3/3 (2).jpg" alt="Data Entry">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 3/3 (3).gif">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 3/3 (4).jpg" alt="System Training">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 3/3 (5).gif" alt="Records Review">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 3/3 (6).jpg" alt="HR Process">
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<!-- Week 4 Modal -->
+<div id="week4-modal" class="modal">
+    <span class="close-modal" onclick="closeModal('week4')">&times;</span>
+    <div class="modal-content" style="max-width: 1200px;">
+        <div class="bg-blue-600 text-white p-6">
+            <h2 class="text-3xl font-bold">Week 4</h2>
+        </div>
+        <div class="p-8">
+            <div class="mb-8">
+                <div class="bg-gray-50 p-6 rounded-lg">
+
+                      <p class="text-gray-700 mb-4">
+                        During the fourth week of my OJT, I was assigned to technical tasks related to hardware troubleshooting and system setup. One of the main tasks involved fixing a laptop that encountered operating system issues caused by a faulty Windows update. I assisted in diagnosing the problem and restoring the system to proper working condition.
+                      </p>
+                      
+                      <p class="text-gray-700 mb-4">
+                        I also worked on assembling two system units intended for a school. This included installing new RAM and storage components, ensuring proper hardware configuration, and preparing the units for operating system installation.
+                      </p>
+                      
+                      <p class="text-gray-700">
+                        After assembling the system units, I personally installed the Windows operating system and configured the devices for use. Meanwhile, my internmate assisted with photocopying and organizing documents. These tasks allowed me to strengthen my skills in hardware assembly, OS installation, and system preparation.
+                      </p>
+                      
+                      
+                </div>
+                <div class="portrait-gallery" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 4/4 (1).jpg" alt="System Design">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 4/4 (2).jpg" alt="Wireframing">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 4/4 (3).jpg" alt="Requirements Analysis">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 4/4 (4).jpg" alt="Database Design">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 4/4 (5).gif" alt="Team Discussion">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 4/4 (6).jpg" alt="Prototype Review">
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+    </div>
+</div>
+
+<!-- Week 5 Modal -->
+<div id="week5-modal" class="modal">
+    <span class="close-modal" onclick="closeModal('week5')">&times;</span>
+    <div class="modal-content" style="max-width: 1200px;">
+        <div class="bg-blue-600 text-white p-6">
+            <h2 class="text-3xl font-bold">Week 5</h2>
+        </div>
+        <div class="p-8">
+            <div class="mb-8">
+                <div class="bg-gray-50 p-6 rounded-lg">
+
+                    <p class="text-gray-700 mb-4">
+                        During the fifth week of my OJT, most of my tasks focused on data encoding and record accuracy. I was assigned to encode CAR-RQA scores of teachers from examinations and assessments into the DepEd system, which required careful attention to detail to ensure that all entries were accurate and complete.
+                      </p>
+                      
+                      <p class="text-gray-700 mb-4">
+                        In addition to encoding, I also assisted in sorting related documents and reviewing records connected to the encoded data. This helped ensure consistency between physical documents and digital records within the office system.
+                      </p>
+                      
+                      <p class="text-gray-700">
+                        I also handled documents from a previous batch that encountered issues during transportation and the signing process, which caused some files to be separated from their original tracking slip. These documents were verified and reattached with the correct tracking slip to restore proper tracking and ensure that they could be monitored throughout the remaining transaction process.
+                      </p>
+                      
+                   
+                </div>
+                <div class="portrait-gallery" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 5/5 (1).jpg" alt="Coding Session">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 5/5 (2).jpg" alt="UI Design">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 5/5 (3).jpg" alt="Authentication System">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 5/5 (4).jpg" alt="Dashboard Development">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 5/5 (5).jpg" alt="API Integration">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 5/5 (6).jpg" alt="Portal Testing">
+                    </div>
+                </div>
+            </div>
+         
+        </div>
+    </div>
+</div>
+
+<!-- Week 6 Modal -->
+<div id="week6-modal" class="modal">
+    <span class="close-modal" onclick="closeModal('week6')">&times;</span>
+    <div class="modal-content" style="max-width: 1200px;">
+        <div class="bg-blue-600 text-white p-6">
+            <h2 class="text-3xl font-bold">Week 6</h2>
+        </div>
+        <div class="p-8">
+            <div class="mb-8">
+                <div class="bg-gray-50 p-6 rounded-lg">
+
+                    <p class="text-gray-700 mb-4">
+                        During the sixth week of my OJT, I worked on a combination of technical and administrative tasks. One of the main activities involved salvaging usable components such as RAM from old or defective computers. These components were reused to upgrade system units with outdated CPUs and motherboards that were no longer suitable for current office workloads.
+                      </p>
+                      
+                      <p class="text-gray-700 mb-4">
+                        Due to the number of system units that needed upgrading, I worked together with Sir Robert and Sir John from the ICT Office. We transferred the salvaged components to better CPU and motherboard combinations to improve system performance and ensure the computers were suitable for daily office use.
+                      </p>
+                      
+                      <p class="text-gray-700 mb-4">
+                        I also assisted in improving the office environment by helping install decorative signage for the ASDS Office alongside Sir Welfire. This included placing the DepEd and ASDS office logos, which were made of plastic lettering with backlighting, as ordered by Ma’am Cheryll Bermudo to enhance the office’s visual presentation.
+                      </p>
+                      
+                      <p class="text-gray-700">
+                        In addition to the technical tasks, I continued encoding CAR-RQA records and performed double-checking by comparing soft copies and hard copies with system entries. This process ensured data accuracy and consistency across physical and digital records.
+                      </p>
+                      
+                   
+                </div>
+                <div class="portrait-gallery" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 6/6 (1).jpg" alt="Unit Testing">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 6/6 (2).jpg" alt="Integration Testing">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 6/6 (3).jpg" alt="Bug Tracking">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 6/6 (4).jpg" alt="Performance Testing">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 6/6 (5).jpg" alt="Test Cases">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 6/6 (6).jpg" alt="Debugging">
+                    </div>
+                </div>
+            </div>
+         
+        </div>
+    </div>
+</div>
+
+<!-- Week 7 Modal -->
+<div id="week7-modal" class="modal">
+    <span class="close-modal" onclick="closeModal('week7')">&times;</span>
+    <div class="modal-content" style="max-width: 1200px;">
+        <div class="bg-blue-600 text-white p-6">
+            <h2 class="text-3xl font-bold">Week 7</h2>
+        </div>
+        <div class="p-8">
+            <div class="mb-8">
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <p class="text-gray-700 mb-4">
+                        During the seventh week of my OJT, I was tasked with sorting and prioritizing documents that required immediate signature. These documents were organized and prepared for forwarding to the appropriate offices, including the Records Section, CID Office, SDS Office, Accounting, Budget, and Human Resources. I also used the Document Tracking System (DTS) to add remarks indicating the purpose of each document, its destination office, and updates for client tracking.
+                      </p>
+                      
+                      <p class="text-gray-700 mb-4">
+                        Part of my responsibilities included ensuring that documents were properly routed and delivered after processing. This task emphasized accuracy, proper coordination, and timeliness in handling priority documents within the office workflow.
+                      </p>
+                      
+                      <p class="text-gray-700 mb-4">
+                        This week also coincided with the Bida ang Guro Bazaar 2025, an event featuring booth displays from all 14 municipalities. Each booth showcased school initiatives, products, and services, and the exhibits were displayed throughout the week. The event was part of DepEd Sorsogon Province’s ongoing celebrations and activities recognizing teachers and schools.
+                      </p>
+                      
+                      <p class="text-gray-700">
+                        I assisted Ma’am Cheryll Bermudo, together with Sir Welfire, during visits to each bazaar booth. As the Assistant Schools Division Superintendent (ASDS), Ma’am Cheryll served as one of the judges for booth evaluations focusing on design, creativity, organization, and overall presentation. Observing the evaluation process, alongside Sir Welfire and seeing Sir Jose (SDS) visit the booths, gave me firsthand exposure to how official assessments and fair judgment are conducted during large-scale DepEd events.
+                      </p>
+                      
+                   
+                </div>
+                <div class="portrait-gallery" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 7/7 (1).jpg" alt="Training Session">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 7/7 (2).jpg" alt="Manual Creation">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 7/7 (3).jpg" alt="Video Tutorial">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 7/7 (4).jpg" alt="FAQ Development">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 7/7 (5).jpg" alt="User Feedback">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 7/7 (6).jpg" alt="Documentation Review">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 7/7 (7).jpg" alt="Documentation Review">
+                    </div>   <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 7/7 (8).jpg" alt="Documentation Review">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 7/7 (9).jpg" alt="Documentation Review">
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<!-- Week 8 Modal -->
+<div id="week8-modal" class="modal">
+    <span class="close-modal" onclick="closeModal('week8')">&times;</span>
+    <div class="modal-content" style="max-width: 1200px;">
+        <div class="bg-blue-600 text-white p-6">
+            <h2 class="text-3xl font-bold">Week 8</h2>
+        </div>
+        <div class="p-8">
+            <div class="mb-8">
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <p class="text-gray-700 mb-4">
+                        The eighth week of my OJT was especially eventful as it coincided with the culminating activities of the month-long celebration of the National Teachers’ Month and World Teachers’ Day 2025 of SDO Sorsogon Province. The celebration resulted in a significant increase in office transactions and coordination requirements.
+                      </p>
+                      
+                      <p class="text-gray-700 mb-4">
+                        During the week, many teachers and clients visited the office to submit documents for Ma’am Cheryll Bermudo’s signature or to inquire about the status of previously submitted files. Some documents were newly endorsed, while others were being followed up to confirm whether they had already been signed or processed. Managing these requests was hectic due to the volume, but it helped me develop stronger skills in prioritization, organization, and handling multiple tasks under pressure.
+                      </p>
+                      
+                      <p class="text-gray-700">
+                        In addition to document management, I assisted in preparing appearance certificates for activities related to the celebration and other upcoming events. This included cutting, organizing, and preparing the certificates for distribution. These tasks provided practical experience in administrative support during major institutional events and official office operations.
+                      </p>
+                </div>
+                <div class="portrait-gallery" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 8/8 (1).jpg" alt="Network Room">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 8/8 (2).jpg" alt="Topology Mapping">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 8/8 (3).jpg" alt="Maintenance Work">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 8/8 (4).jpg" alt="Troubleshooting">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 8/8 (5).jpg" alt="Security Review">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 8/8 (6).gif" alt="Equipment Setup">
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+    </div>
+</div>
+
+<!-- Week 9 Modal -->
+<div id="week9-modal" class="modal">
+    <span class="close-modal" onclick="closeModal('week9')">&times;</span>
+    <div class="modal-content" style="max-width: 1200px;">
+        <div class="bg-blue-600 text-white p-6">
+            <h2 class="text-3xl font-bold">Week 9</h2>
+        </div>
+        <div class="p-8">
+            <div class="mb-8">
+                <div class="bg-gray-50 p-6 rounded-lg">
+
+                    <p class="text-gray-700 mb-4">
+                        During the ninth week of my OJT, I successfully developed the requested overlay application for the DTS process. I built it using existing applications, GitHub resources, and freely available code as references. After testing, I deployed the application as a web store extension, and it was used by Sir Welfire, Ma’am Alyssa, and other offices that rely on the DTS system. I also started using the application myself during DTS scanning for the week, which helped me see its practical benefits in real-time and ensured the workflow ran more efficiently.
+                      </p>
+                      
+                      <p class="text-gray-700 mb-4">
+                        In addition to deploying the application, I assisted in sorting OPCRF and IPCRF documents for signing, organizing them by date to streamline the workflow for Ma’am Cheryll Bermudo signing.
+                      </p>
+                      
+                      <p class="text-gray-700">
+                        Toward the end of the week, Ma’am Cheryll Bermudo requested that I create a prototype web application for managing Accomplishment Reports and monthly plans. I informed her that I would try to develop it, as this would be my first time creating such an application, and I will be guided by Sir John from the ICT Office throughout the development. This provides a great opportunity to apply my learnings from school, explore web development, and contribute to improving office processes through digital solutions.
+                      </p>
+                      
+                </div>
+                <div class="portrait-gallery" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 9/9 (1).jpg" alt="Backup Setup">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 9/9 (2).jpg" alt="Encryption Demo">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 9/9 (3).jpg" alt="Security Audit">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 9/9 (4).jpg" alt="Access Control">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 9/9 (5).jpg" alt="Data Protection">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 9/9 (6).gif" alt="Backup Verification">
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<!-- Week 10 Modal -->
+<div id="week10-modal" class="modal">
+    <span class="close-modal" onclick="closeModal('week10')">&times;</span>
+    <div class="modal-content" style="max-width: 1200px;">
+        <div class="bg-blue-600 text-white p-6">
+            <h2 class="text-3xl font-bold">Week 10</h2>
+        </div>
+        <div class="p-8">
+            <div class="mb-8">
+                <div class="bg-gray-50 p-6 rounded-lg">
+
+                    <p class="text-gray-700 mb-4">
+                        The tenth week of my OJT became more eventful with the Kasanggayahan celebration parade. Together with Sir Welfire, Sir Lance, and the rest of the personnel from the DepEd Division Office of Sorsogon, I participated in the departmental activities related to the event. This experience allowed me to observe coordination and participation at the division level during a major provincial celebration.
+                      </p>
+                      
+                      <p class="text-gray-700 mb-4">
+                        During the same week, I handled documents left by teachers and clients that required processing through the Document Tracking System (DTS). Some of these documents needed urgent signing due to specific deadlines and immediate concerns. I also encountered files from previous weeks that were missing their DTS attachments, which required re-encoding and proper tagging to ensure they could still be tracked accurately within the system.
+                      </p>
+                      
+                      <p class="text-gray-700 mb-4">
+                        To help streamline the signing process, I was tasked with adding tabs and organizing documents in a way that made them easier for Ma’am Cheryll Bermudo to review and sign efficiently. This task emphasized the importance of document organization in supporting executive-level workflows.
+                      </p>
+                      
+                      <p class="text-gray-700">
+                        In addition, I continued working on the initial prototyping and flow planning of the proposed application. This involved outlining how the system would function and how it could potentially improve existing office processes. Although still in the early stages, this task allowed me to apply analytical thinking and gradually build confidence in system design concepts.
+                      </p>
+                </div>
+                <div class="portrait-gallery" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 10/10 (1).jpeg" alt="Server Setup">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 10/10 (2).jpg" alt="Production Testing">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 10/10 (3).jpg" alt="Data Migration">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 10/10 (4).jpg" alt="Deployment Checklist">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 10/10 (5).jpg" alt="Configuration Work">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 10/10 (6).jpg" alt="Final Checks">
+                    </div>
+                </div>
+            </div>
+          
+        </div>
+    </div>
+</div>
+
+<!-- Week 11 Modal -->
+<div id="week11-modal" class="modal">
+    <span class="close-modal" onclick="closeModal('week11')">&times;</span>
+    <div class="modal-content" style="max-width: 1200px;">
+        <div class="bg-blue-600 text-white p-6">
+            <h2 class="text-3xl font-bold">Week 11</h2>
+        </div>
+        <div class="p-8">
+            <div class="mb-8">
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <p class="text-gray-700 mb-4">
+                        The eleventh week of my OJT was relatively lighter compared to previous weeks. There were fewer documents entering the ASDS Office, as most transactions during this period involved forwarding documents from our office to other departments.
+                      </p>
+                      
+                      <p class="text-gray-700 mb-4">
+                        My primary task for the week focused on scanning documents and encoding them into the Document Tracking System (DTS). After scanning, the documents were forwarded to the appropriate offices, ensuring that each file was properly recorded and routed according to its purpose.
+                      </p>
+                      
+                      <p class="text-gray-700">
+                        Although the workload was lighter, this week emphasized consistency, accuracy, and proper coordination in routine office operations. It reinforced the importance of maintaining efficiency and attention to detail even during less demanding periods.
+                      </p>
+                   
+                </div>
+                <div class="portrait-gallery" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 11/11 (1).jpg" alt="Performance Monitoring">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 11/11 (2).jpg" alt="Issue Resolution">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 11/11 (3).jpg" alt="Support Docs">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 11/11 (4).jpg">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 11/11 (5).gif" alt="Support Team">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 11/11 (6).jpg" alt="System Monitoring">
+                    </div>
+                </div>
+            </div>
+          
+        </div>
+    </div>
+</div>
+
+<!-- Week 12 Modal -->
+<div id="week12-modal" class="modal">
+    <span class="close-modal" onclick="closeModal('week12')">&times;</span>
+    <div class="modal-content" style="max-width: 1200px;">
+        <div class="bg-blue-600 text-white p-6">
+            <h2 class="text-3xl font-bold">Week 12</h2>
+        </div>
+        <div class="p-8">
+            <div class="mb-8">
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <p class="text-gray-700 mb-4">
+                        During the twelfth week of my OJT, I assisted with restocking printer inks and organizing supplies in the office cabinets. I also refilled and maintained printers in both the ASDS Office and the BAC Office to ensure uninterrupted document printing and office operations.
+                      </p>
+                      
+                      <p class="text-gray-700 mb-4">
+                        In addition to maintenance tasks, I continued organizing and sorting documents that entered the office. Most of these files were processed through the Document Tracking System (DTS) and forwarded to the appropriate offices. This work required attention to detail and consistency to ensure documents were accurately recorded and routed efficiently.
+                      </p>
+                      
+                      <p class="text-gray-700">
+                        Although much of the week involved routine tasks, these responsibilities reinforced the importance of organization, resource management, and timely handling of documents in supporting overall office workflow.
+                      </p>
+                </div>
+                <div class="portrait-gallery" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 12/12 (1).jpg" alt="Performance Analysis">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 12/12 (2).jpg" alt="Query Optimization">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 12/12 (3).jpg" alt="Code Refactoring">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 12/12 (4).jpg" alt="Caching Implementation">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 12/12 (5).jpg" alt="Optimization Testing">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 12/12 (6).jpg" alt="System Monitoring">
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<!-- Week 13 Modal -->
+<div id="week13-modal" class="modal">
+    <span class="close-modal" onclick="closeModal('week13')">&times;</span>
+    <div class="modal-content" style="max-width: 1200px;">
+        <div class="bg-blue-600 text-white p-6">
+            <h2 class="text-3xl font-bold">Week 13</h2>
+        </div>
+        <div class="p-8">
+            <div class="mb-8">
+                <div class="bg-gray-50 p-6 rounded-lg">
+
+                    <p class="text-gray-700 mb-4">
+                        During the thirteenth week of my OJT, I focused on organizing and preparing documents that required Ma’am Cheryll Bermudo’s signature. The files were arranged to support a smoother workflow, making the review and signing process more efficient and minimizing delays. During the seminar held at Villa Isabel Function Hall, I was assigned to assist Ma’am Cheryll Bermudo with the signing of priority documents, which required my full attention and prevented photo documentation of the activity.
+                      </p>
+                      
+                      <p class="text-gray-700 mb-4">
+                        At the same time, I continued testing the prototype web application. I consulted Sir Welfire and Ma’am Cheryll Bermudo regarding the system’s flow, particularly identifying which features were necessary and which parts could be simplified or removed. Special attention was given to the reporting section to ensure it would be practical and aligned with office needs.
+                      </p>
+                      
+                      <p class="text-gray-700">
+                        I also coordinated with Sir John from the ICT Office to discuss the suggested changes and potential enhancements to the application. This collaboration helped me better understand how user feedback, technical feasibility, and office requirements must be aligned when developing or improving a system.
+                      </p>
+                      
+                </div>
+                <div class="portrait-gallery" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 13/13 (1).jpg" alt="Technical Documentation">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 13/13 (2).jpg" alt="Architecture Diagrams">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 13/13 (3).jpg" alt="API Documentation">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 13/13 (4).jpg" alt="Maintenance Manual">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 13/13 (5).jpg" alt="Document Review">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 13/13 (6).jpg" alt="Final Touches">
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+    </div>
+</div>
+
+<!-- Week 14 Modal -->
+<div id="week14-modal" class="modal">
+    <span class="close-modal" onclick="closeModal('week14')">&times;</span>
+    <div class="modal-content" style="max-width: 1200px;">
+        <div class="bg-blue-600 text-white p-6">
+            <h2 class="text-3xl font-bold">Week 14</h2>
+        </div>
+        <div class="p-8">
+            <div class="mb-8">
+                <div class="bg-gray-50 p-6 rounded-lg">
+
+               
+                    <p class="text-gray-700 mb-4">
+                        During the fourteenth week of my OJT, I assisted in the ManCom event and the Christmas celebration held in the office, attended by school heads, PSDS, ASDS, and the SDS office. The event required careful planning and coordination to ensure smooth execution.
+                      </p>
+                      
+                      <p class="text-gray-700 mb-4">
+                        I was assigned by Ma’am Laarni to help with the distribution of gifts to school heads and PSDS participants. I also assisted in managing attendance and ensuring that all guests were properly accounted for during the program.
+                      </p>
+                      
+                      <p class="text-gray-700">
+                        During the ManCom event, Sir Welfire presented the system prototype to PSDS and school heads. Being part of this activity allowed me to observe how system proposals are introduced and explained to key users, providing valuable insight into the presentation and evaluation of digital solutions in an official setting.
+                      </p>
+                      
+                   
+                </div>
+                <div class="portrait-gallery" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 14/14 (1).jpg" alt="Slide Creation">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 14/14 (2).jpg" alt="Demo Materials">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 14/14 (3).jpg" alt="Rehearsal">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 14/14 (4).jpg" alt="Metrics Gathering">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 14/14 (5).jpg" alt="Team Practice">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 14/14 (6).jpg" alt="Final Review">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 14/14 (7).jpg" alt="Final Review">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Week 15 Modal -->
+<div id="week15-modal" class="modal">
+    <span class="close-modal" onclick="closeModal('week15')">&times;</span>
+    <div class="modal-content" style="max-width: 1200px;">
+        <div class="bg-blue-600 text-white p-6">
+            <h2 class="text-3xl font-bold">Week 15</h2>
+        </div>
+        <div class="p-8">
+            <div class="mb-8">
+                <p class="text-gray-700 mb-4">
+                    During the fifteenth week of my OJT, I assisted in assembling and installing new monitors in the ASDS Office. This included attaching monitors to monitor stands and setting up additional displays to help improve workspace efficiency and support daily office tasks.
+                  </p>
+                  
+                  <p class="text-gray-700 mb-4">
+                    In the same week, I had the opportunity to test the prototype system together with Sir John Hedia in the office server environment. This allowed us to observe how the system behaved in an actual office setup and identify areas that needed adjustment or improvement.
+                  </p>
+                  
+                  <p class="text-gray-700">
+                    These activities helped me better understand the relationship between hardware setup and system performance, while also gaining experience in testing applications within a real working environment.
+                  </p>
+                             
+                <div class="portrait-gallery" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 15/15 (1).jpg" alt="Final Presentation">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 15/15 (2).jpg" alt="System Handover">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 15/15 (3).jpg" alt="Completion Certificate">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 15/15 (4).jpg" alt="Farewell Meeting">
+                    </div>
+                    <div class="portrait-item">
+                        <img src="assets/img/ojtpics/Week 15/15 (5).jpg" alt="Feedback Session">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        <!-- Farewell & Conclusion Section -->
+        <section id="farewell" class="py-16 bg-gradient-to-r from-blue-50 to-indigo-50">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Personal Message -->
+                <div class="mb-8 text-center">
+                    <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8 max-w-3xl mx-auto">
+                        <div class="flex items-center justify-center mb-4">
+                            <i class="fas fa-graduation-cap text-blue-500 text-2xl mr-3"></i>
+                            <h3 class="text-xl md:text-2xl font-bold text-gray-800">Week 16</h3>
+                        </div>
+                        <p class="text-gray-700 text-lg leading-relaxed">
+                            I completed my OJT at the DepEd School Division Office, and my final day was made memorable by a small gathering organized by the Administrative Office, led by Sir Jomar and Sir Lance. We shared food, spent time together, and took photos with the division heads. It was a meaningful way to close our journey as interns, and I am truly grateful for the guidance and experiences they shared with us, from welcoming us on our first day to supporting us until the very end of our internship.
+                        </p>
+                        
+                    </div>
+                </div>
+    
+                <!-- Picture Grid - 9 memorable moments -->
+                <div class="mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <!-- Picture 1 -->
+                        <div class="relative group overflow-hidden rounded-2xl shadow-lg">
+                            <img src="assets/img/ojtpics/END/1 (1).JPG" 
+                                 alt="First Day" 
+                                 class="w-full h-64 object-cover group-hover:scale-110 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
+                            </div>
+                        </div>
+                        
+                        <!-- Picture 2 -->
+                        <div class="relative group overflow-hidden rounded-2xl shadow-lg">
+                            <img src="assets/img/ojtpics/END/1 (2).JPG" 
+                                 alt="Team Photo" 
+                                 class="w-full h-64 object-cover group-hover:scale-110 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
+                            </div>
+                        </div>
+                        
+                        <!-- Picture 3 -->
+                        <div class="relative group overflow-hidden rounded-2xl shadow-lg">
+                            <img src="assets/img/ojtpics/END/1 (3).JPG" 
+                                 alt="Farewell Gathering" 
+                                 class="w-full h-64 object-cover group-hover:scale-110 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
+                            </div>
+                        </div>
+                        
+                        <!-- Picture 4 -->
+                        <div class="relative group overflow-hidden rounded-2xl shadow-lg">
+                            <img src="assets/img/ojtpics/END/1 (4).JPG" 
+                                 alt="With Division Heads" 
+                                 class="w-full h-64 object-cover group-hover:scale-110 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
+                            </div>
+                        </div>
+                        
+                        <!-- Picture 5 -->
+                        <div class="relative group overflow-hidden rounded-2xl shadow-lg">
+                            <img src="assets/img/ojtpics/END/1 (5).JPG" 
+                                 alt="Food Sharing" 
+                                 class="w-full h-64 object-cover group-hover:scale-110 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
+                            </div>
+                        </div>
+                        
+                        <!-- Picture 6 -->
+                        <div class="relative group overflow-hidden rounded-2xl shadow-lg">
+                            <img src="assets/img/ojtpics/END/1 (6).JPG" 
+                                 alt="Team Collaboration" 
+                                 class="w-full h-64 object-cover group-hover:scale-110 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
+                            </div>
+                        </div>
+                        
+                        <!-- Picture 7 -->
+                        <div class="relative group overflow-hidden rounded-2xl shadow-lg">
+                            <img src="assets/img/ojtpics/END/1 (7).JPEG" 
+                                 alt="Learning Moments" 
+                                 class="w-full h-64 object-cover group-hover:scale-110 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
+                            </div>
+                        </div>
+                        
+                        <!-- Picture 8 -->
+                        <div class="relative group overflow-hidden rounded-2xl shadow-lg">
+                            <img src="assets/img/ojtpics/END/1 (8).JPG" 
+                                 alt="Special Events" 
+                                 class="w-full h-64 object-cover group-hover:scale-110 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
+                            </div>
+                        </div>
+                        
+                        <!-- Picture 9 -->
+                        <div class="relative group overflow-hidden rounded-2xl shadow-lg">
+                            <img src="assets/img/ojtpics/END/1 (9).JPG" 
+                                 alt="Final Day" 
+                                 class="w-full h-64 object-cover group-hover:scale-110 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <!-- Project Showcase Section - Two Projects -->
+    <section id="showcase" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-serif font-bold text-gray-800 mb-4">
+                    APP
+                </h2>
+            </div>
+
+            <!-- Two Projects Grid -->
+            <div class="grid md:grid-cols-2 gap-12 max-w-7xl mx-auto">
+                
+    <!-- Project 1: Plan and Accomplishment Tracking System -->
+    <div class="showcase-card bg-white rounded-2xl shadow-xl overflow-hidden">
+        <!-- Main Project Image -->
+        <div class="h-64 bg-cover bg-center relative" 
+            style="background-image: url('assets/img/ojtpics/App/1.png');">
+        </div>
+
+        <!-- Project Details -->
+        <div class="p-6">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Plan and Accomplishment Tracking System (PATS)</h3>
+            
+            <p class="text-gray-700 mb-6 leading-relaxed">
+                Digital platform for school heads to submit monthly work plans and accomplishment reports. PSDS and ASDS review and approve online—no need to visit DepEd office.
+            </p>
+
+            <!-- Simple Approval Workflow -->
+            <div class="mb-6">
+                <h4 class="font-bold text-gray-800 mb-3">Approval Workflow</h4>
+                <div class="flex items-center justify-between">
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-upload text-blue-600"></i>
+                        </div>
+                        <p class="text-sm font-medium">School Head<br>Submits</p>
+                    </div>
+                    
+                    <div class="flex-1 h-1 bg-gray-300 mx-2"></div>
+                    
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-search text-green-600"></i>
+                        </div>
+                        <p class="text-sm font-medium">PSDS<br>Reviews,<br>endorses to ASDS</p>
+                    </div>
+                    
+                    <div class="flex-1 h-1 bg-gray-300 mx-2"></div>
+                    
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-check text-purple-600"></i>
+                        </div>
+                        <p class="text-sm font-medium">ASDS<br>Approves</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project 2: EZ-CLIP Clipboard Extension -->
+    <div class="showcase-card bg-white rounded-2xl shadow-xl overflow-hidden">
+        <!-- Main Project Image -->
+        <div class="h-64 bg-cover bg-center relative" 
+            style="background-image: url('assets/img/ojtpics/App/2.png');">
+        </div>
+
+        <!-- Project Details -->
+        <div class="p-6">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">EZ-CLIP Clipboard Extension</h3>
+            
+            <p class="text-gray-700 mb-6 leading-relaxed">
+                Type all you want to copy, then press copy and paste to input boxes to paragraph. A draggable clipboard overlay that stays on any webpage for quick text collection.
+            </p>
+
+            <!-- Simple Workflow -->
+            <div class="mb-6">
+                <h4 class="font-bold text-gray-800 mb-3">How It Works</h4>
+                <div class="flex items-center justify-between">
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-keyboard text-blue-600"></i>
+                        </div>
+                        <p class="text-sm font-medium">Type text<br>in overlay</p>
+                    </div>
+                    
+                    <div class="flex-1 h-1 bg-gray-300 mx-2"></div>
+                    
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-copy text-green-600"></i>
+                        </div>
+                        <p class="text-sm font-medium">Click copy<br>button</p>
+                    </div>
+                    
+                    <div class="flex-1 h-1 bg-gray-300 mx-2"></div>
+                    
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                            <i class="fas fa-paste text-purple-600"></i>
+                        </div>
+                        <p class="text-sm font-medium">Paste to<br>any input</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex flex-col gap-3">
+                <button onclick="openVideoModal('ez-clip')" 
+                        class="w-full inline-flex items-center justify-center px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg shadow transition hover:scale-105">
+                    <i class="fas fa-play-circle mr-2"></i>
+                    Watch Demo
+                </button>
+                
+                <a href="https://chromewebstore.google.com/detail/ez-clip/nbnhlimlooogkhkiiagiomhldnballjn?hl=en&authuser=0" 
+                target="_blank"
+                class="w-full inline-flex items-center justify-center px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow transition hover:scale-105">
+                    <i class="fab fa-chrome mr-2"></i>
+                    Get Extension
+                </a>
+            </div>
+        </div>
+    </div>
+            </div>
+        
+        </div>
+    </section>
+
+    <!-- Photo Gallery Section -->
+    <section id="gallery" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-serif font-bold text-gray-800 mb-4">Gallery</h2>
+            </div>
+            <!-- Gallery Grid -->
+<div id="gallery-container" class="gallery-grid">
+    <!-- JPEG Images: 1 (1) - 1 (6) -->
+    <div class="gallery-item">
+        <img src="assets/img/gallery/1 (1).jpeg" alt="OJT Memory 1">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/1 (2).jpeg" alt="OJT Memory 2">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/1 (3).jpeg" alt="OJT Memory 3">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/1 (4).jpeg" alt="OJT Memory 4">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/1 (5).jpeg" alt="OJT Memory 5">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/1 (6).jpeg" alt="OJT Memory 6">
+    </div>
+
+    <!-- GIF Images: 2 (1) - 2 (4) -->
+    <div class="gallery-item">
+        <img src="assets/img/gallery/2 (1).gif" alt="OJT Animated 1">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/2 (2).gif" alt="OJT Animated 2">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/2 (3).gif" alt="OJT Animated 3">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/2 (4).gif" alt="OJT Animated 4">
+    </div>
+
+    <!-- JPG Images: 3 (1) - 3 (28) -->
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (1).jpg" alt="OJT Photo 1">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (2).jpg" alt="OJT Photo 2">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (3).jpg" alt="OJT Photo 3">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (4).jpg" alt="OJT Photo 4">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (5).jpg" alt="OJT Photo 5">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (6).jpg" alt="OJT Photo 6">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (7).jpg" alt="OJT Photo 7">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (8).jpg" alt="OJT Photo 8">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (9).jpg" alt="OJT Photo 9">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (10).jpg" alt="OJT Photo 10">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (11).jpg" alt="OJT Photo 11">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (12).jpg" alt="OJT Photo 12">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (13).jpg" alt="OJT Photo 13">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (14).jpg" alt="OJT Photo 14">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (15).jpg" alt="OJT Photo 15">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (16).jpg" alt="OJT Photo 16">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (17).jpg" alt="OJT Photo 17">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (18).jpg" alt="OJT Photo 18">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (19).jpg" alt="OJT Photo 19">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (20).jpg" alt="OJT Photo 20">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (21).jpg" alt="OJT Photo 21">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (22).jpg" alt="OJT Photo 22">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (23).jpg" alt="OJT Photo 23">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (24).jpg" alt="OJT Photo 24">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (25).jpg" alt="OJT Photo 25">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (26).jpg" alt="OJT Photo 26">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (27).jpg" alt="OJT Photo 27">
+    </div>
+    <div class="gallery-item">
+        <img src="assets/img/gallery/3 (28).jpg" alt="OJT Photo 28">
+    </div>
+</div>
+        </div>
+    </section>
+
+
+    <!-- Video Demo Modal -->
+    <div id="video-modal" class="modal">
+        <span class="close-modal" onclick="closeVideoModal()">&times;</span>
+        <div class="modal-content">
+            <div class="bg-blue-600 text-white p-6 rounded-t-lg">
+                <h2 class="text-3xl font-bold" id="video-modal-title">Project Demo</h2>
+            </div>
+            <div class="p-6">
+                <div class="video-container mb-6">
+                    <iframe id="demo-video" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <p class="text-gray-700" id="video-description">
+                    This demo showcases the functionality of the system developed during my OJT at DepEd Sorsogon City.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('menu-toggle').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+    
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    
+        // Modal functionality for weeks
+        function openModal(weekId) {
+            document.getElementById(weekId + '-modal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            
+            // Load placeholder images for this week if needed
+            loadPlaceholderImages(weekId);
+        }
+    
+        function closeModal(weekId) {
+            document.getElementById(weekId + '-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    
+        // Video modal functionality
+               // Video modal functionality
+               function openVideoModal(project) {
+            const modal = document.getElementById('video-modal');
+            const video = document.getElementById('demo-video');
+            const title = document.getElementById('video-modal-title');
+            const description = document.getElementById('video-description');
+            
+            if (project === 'pats-tracking') {
+                title.textContent = 'PATS Demo';
+                video.src = 'https://www.youtube.com/embed/VIDEO_ID_FOR_PATS';
+                description.textContent = 'This demo showcases the Plan and Accomplishment Tracking System developed during my OJT. The system allows school heads to submit work plans and accomplishment reports online.';
+            } else if (project === 'ez-clip') {
+                title.textContent = 'EZ-CLIP Demo';
+                video.src = 'https://www.youtube.com/embed/Q6jvsRbmOg0';
+                description.textContent = 'This demo showcases the EZ-CLIP clipboard overlay extension. A draggable clipboard overlay that stays on any webpage for quick text collection.';
+            }
+            
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+    
+        function closeVideoModal() {
+            document.getElementById('video-modal').style.display = 'none';
+            document.getElementById('demo-video').src = '';
+            document.body.style.overflow = 'auto';
+        }
+    
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                const modals = document.querySelectorAll('.modal');
+                modals.forEach(modal => {
+                    modal.style.display = 'none';
+                });
+                document.getElementById('demo-video').src = '';
+                document.body.style.overflow = 'auto';
+            }
+        }
+    
+        // Photo gallery functionality
+        document.getElementById('add-photo-btn').addEventListener('click', function() {
+            document.getElementById('photo-upload').click();
+        });
+    
+        document.getElementById('photo-upload').addEventListener('change', function(e) {
+            const files = e.target.files;
+            const galleryContainer = document.getElementById('gallery-container');
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const galleryItem = document.createElement('div');
+                    galleryItem.className = 'gallery-item';
+                    
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = 'Uploaded photo';
+                    
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'delete-btn';
+                    deleteBtn.innerHTML = '<i class="fas fa-times"></i>';
+                    deleteBtn.onclick = function() {
+                        deletePhoto(this);
+                    };
+                    
+                    galleryItem.appendChild(img);
+                    galleryItem.appendChild(deleteBtn);
+                    galleryContainer.appendChild(galleryItem);
+                };
+                
+                reader.readAsDataURL(file);
+            }
+            
+            // Reset the file input
+            this.value = '';
+        });
+    
+        function deletePhoto(button) {
+            const galleryItem = button.parentElement;
+            galleryItem.remove();
+        }
+    
+        // Function to load placeholder images for modal galleries
+        function loadPlaceholderImages(weekId) {
+            const modal = document.getElementById(weekId + '-modal');
+            if (!modal) return;
+            
+            
+            const images = modal.querySelectorAll('.portrait-item img');
+            if (images.length > 0 && images[0].src.includes('assets/img/ojtpics')) {
+                // Only load placeholders if local images don't exist
+                setTimeout(() => {
+                    images.forEach(img => {
+                        if (img.naturalHeight === 0 || img.naturalWidth === 0) {
+                            // Image failed to load, use placeholder
+                            img.src = placeholderImages[weekId] + '?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+                            img.alt = 'Placeholder Image for ' + weekId.replace('week', 'Week ');
+                        }
+                    });
+                }, 500);
+            }
+        }
+    
+        // Initialize placeholder images for Week 1 card
+        window.addEventListener('load', function() {
+            const week1Image = document.querySelector('.week-card.active-week .bg-cover');
+            if (week1Image) {
+                const style = week1Image.style.backgroundImage;
+                if (style.includes('url("assets/img/ojtpics/Week 1/1(1).jpg")')) {
+                    // Test if image exists
+                    const img = new Image();
+                    img.onerror = function() {
+                        // Image doesn't exist, use placeholder
+                        week1Image.style.backgroundImage = 'url(https://images.unsplash.com/photo-1588072432836-4b4f2ca7f4e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80)';
+                    };
+                    img.src = 'assets/img/ojtpics/Week 1/1(1).jpg';
+                }
+            }
+        });
+    </script>
+</body>
+</html>
